@@ -1,0 +1,60 @@
+# Compiled class files
+*.class
+
+# Package Files
+*.jar
+*.war
+*.ear
+*.nar
+*.zip
+
+# Log files
+*.log
+hs_err_pid*
+
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+pom.xml.bak
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# Gradle
+/build/
+/out/
+.gradle/
+.gradletasknamecache
+!gradle-wrapper.jar
+.gradle-app.setting
+
+# IDEs (IntelliJ, VS Code, Eclipse, etc.)
+# IntelliJ
+.idea/
+*.iml
+*.iws
+*.ipr
+/out/
+
+# VS Code
+.vscode/
+
+# Eclipse
+.classpath
+.project
+.settings/
+bin/
+tmp/
+.metadata
+local.properties
+.loadpath
+.factorypath
+
+# OS-generated files
+.DS_Store
+Thumbs.db
