@@ -48,7 +48,7 @@ public class AdminPanelUI extends JFrame {
 
         add(createModernHeader(), BorderLayout.NORTH);
         add(createTabbedPane(), BorderLayout.CENTER);
-    
+
         add(createStatusBar(), BorderLayout.SOUTH);
     }
 
@@ -59,16 +59,15 @@ public class AdminPanelUI extends JFrame {
                 super.paintComponent(g);
                 Graphics2D g2d = (Graphics2D) g;
                 g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                
+
                 GradientPaint gradient = new GradientPaint(
-                    0, 0, ADMIN_PRIMARY, 
-                    getWidth(), getHeight(), ADMIN_SECONDARY
-                );
+                        0, 0, ADMIN_PRIMARY,
+                        getWidth(), getHeight(), ADMIN_SECONDARY);
                 g2d.setPaint(gradient);
                 g2d.fillRect(0, 0, getWidth(), getHeight());
             }
         };
-        
+
         header.setLayout(new BorderLayout());
         header.setPreferredSize(new Dimension(getWidth(), 120));
         header.setBorder(new EmptyBorder(20, 30, 20, 30));
@@ -76,32 +75,32 @@ public class AdminPanelUI extends JFrame {
         // Left side - Title
         JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         titlePanel.setOpaque(false);
-        
+
         JLabel iconLabel = new JLabel("👨‍💼");
         iconLabel.setFont(new Font("Segoe UI", Font.PLAIN, 32));
         iconLabel.setForeground(Color.WHITE);
-        
+
         JPanel textPanel = new JPanel();
         textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.Y_AXIS));
         textPanel.setOpaque(false);
-        
+
         JLabel titleLabel = new JLabel("Admin Panel");
         titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 24));
         titleLabel.setForeground(Color.WHITE);
-        
+
         JLabel subtitleLabel = new JLabel("Banking System Management");
         subtitleLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         subtitleLabel.setForeground(new Color(255, 255, 255, 200));
-        
+
         textPanel.add(titleLabel);
         textPanel.add(subtitleLabel);
-        
+
         titlePanel.add(iconLabel);
         titlePanel.add(Box.createHorizontalStrut(15));
         titlePanel.add(textPanel);
-        
+
         JPanel statsPanel = createQuickStatsPanel();
-        
+
         header.add(titlePanel, BorderLayout.WEST);
         header.add(statsPanel, BorderLayout.EAST);
 
@@ -122,9 +121,8 @@ public class AdminPanelUI extends JFrame {
         statsLabel.setBackground(new Color(255, 255, 255, 30));
         statsLabel.setOpaque(true);
         statsLabel.setBorder(BorderFactory.createCompoundBorder(
-            new LineBorder(new Color(255, 255, 255, 80)),
-            new EmptyBorder(8, 15, 8, 15)
-        ));
+                new LineBorder(new Color(255, 255, 255, 80)),
+                new EmptyBorder(8, 15, 8, 15)));
 
         panel.add(statsLabel);
         return panel;
@@ -134,11 +132,11 @@ public class AdminPanelUI extends JFrame {
         JTabbedPane tabbedPane = new JTabbedPane();
         tabbedPane.setFont(new Font("Segoe UI", Font.BOLD, 14));
         tabbedPane.setBackground(BACKGROUND_COLOR);
-        
+
         tabbedPane.addTab("📋 Account Approvals", createApprovalsPanel());
-        
+
         tabbedPane.addTab("👥 Account Management", createManagementPanel());
-        
+
         tabbedPane.addTab("📊 System Overview", createOverviewPanel());
 
         return tabbedPane;
@@ -199,9 +197,8 @@ public class AdminPanelUI extends JFrame {
         JTextField accNumField = new JTextField(15);
         accNumField.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         accNumField.setBorder(BorderFactory.createCompoundBorder(
-            new LineBorder(new Color(200, 200, 200)),
-            new EmptyBorder(10, 12, 10, 12)
-        ));
+                new LineBorder(new Color(200, 200, 200)),
+                new EmptyBorder(10, 12, 10, 12)));
 
         // Auto-fill from selection
         pendingAccountsList.addListSelectionListener(e -> {
@@ -257,7 +254,6 @@ public class AdminPanelUI extends JFrame {
         JPanel bulkTool = createToolCard("🚀 Bulk Operations", "Manage multiple accounts at once", "BULK");
         toolsPanel.add(bulkTool);
 
-        
         JPanel transactionTool = createToolCard("📊 Transaction Logs", "View all transaction history", "TRANSACTIONS");
         toolsPanel.add(transactionTool);
 
@@ -275,9 +271,8 @@ public class AdminPanelUI extends JFrame {
         JPanel card = new JPanel(new BorderLayout());
         card.setBackground(new Color(245, 245, 245));
         card.setBorder(BorderFactory.createCompoundBorder(
-            new LineBorder(new Color(220, 220, 220)),
-            new EmptyBorder(20, 20, 20, 20)
-        ));
+                new LineBorder(new Color(220, 220, 220)),
+                new EmptyBorder(20, 20, 20, 20)));
         card.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
         JLabel titleLabel = new JLabel(title);
@@ -296,9 +291,11 @@ public class AdminPanelUI extends JFrame {
             public void mouseEntered(MouseEvent e) {
                 card.setBackground(new Color(235, 235, 235));
             }
+
             public void mouseExited(MouseEvent e) {
                 card.setBackground(new Color(245, 245, 245));
             }
+
             public void mouseClicked(MouseEvent e) {
                 handleToolAction(action);
             }
@@ -331,9 +328,11 @@ public class AdminPanelUI extends JFrame {
         statsPanel.setBackground(BACKGROUND_COLOR);
         statsPanel.setBorder(new EmptyBorder(20, 0, 0, 0));
 
-        // Sample statistics (in real implementation, these would come from the database)
+        // Sample statistics (in real implementation, these would come from the
+        // database)
         statsPanel.add(createStatCard("📈 Total Accounts", "1,247", ADMIN_PRIMARY, "Active banking accounts"));
-        statsPanel.add(createStatCard("⏳ Pending Approval", String.valueOf(getPendingCount()), WARNING_COLOR, "Awaiting activation"));
+        statsPanel.add(createStatCard("⏳ Pending Approval", String.valueOf(getPendingCount()), WARNING_COLOR,
+                "Awaiting activation"));
         statsPanel.add(createStatCard("✅ Active Today", "23", SUCCESS_COLOR, "Accounts active today"));
         statsPanel.add(createStatCard("💰 Total Balance", "₹2.4M", new Color(255, 152, 0), "System total balance"));
         statsPanel.add(createStatCard("📊 Transactions", "15,482", new Color(33, 150, 243), "Total transactions"));
@@ -373,9 +372,8 @@ public class AdminPanelUI extends JFrame {
         JPanel statusBar = new JPanel(new BorderLayout());
         statusBar.setBackground(new Color(240, 240, 240));
         statusBar.setBorder(new CompoundBorder(
-            new MatteBorder(1, 0, 0, 0, new Color(200, 200, 200)),
-            new EmptyBorder(8, 20, 8, 20)
-        ));
+                new MatteBorder(1, 0, 0, 0, new Color(200, 200, 200)),
+                new EmptyBorder(8, 20, 8, 20)));
 
         JLabel statusLabel = new JLabel("Ready - Admin Panel Active");
         statusLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
@@ -402,36 +400,35 @@ public class AdminPanelUI extends JFrame {
         protected void paintComponent(Graphics g) {
             Graphics2D g2d = (Graphics2D) g;
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            
+
             g2d.setColor(SHADOW_COLOR);
-            g2d.fillRoundRect(2, 2, getWidth()-4, getHeight()-4, 15, 15);
-            
+            g2d.fillRoundRect(2, 2, getWidth() - 4, getHeight() - 4, 15, 15);
+
             g2d.setColor(getBackground());
-            g2d.fillRoundRect(0, 0, getWidth()-2, getHeight()-2, 12, 12);
-            
+            g2d.fillRoundRect(0, 0, getWidth() - 2, getHeight() - 2, 12, 12);
+
             super.paintComponent(g);
         }
     }
 
     private class PendingAccountRenderer extends DefaultListCellRenderer {
         @Override
-        public Component getListCellRendererComponent(JList<?> list, Object value, 
+        public Component getListCellRendererComponent(JList<?> list, Object value,
                 int index, boolean isSelected, boolean cellHasFocus) {
             JLabel label = (JLabel) super.getListCellRendererComponent(
-                list, value, index, isSelected, cellHasFocus);
-            
+                    list, value, index, isSelected, cellHasFocus);
+
             label.setBorder(new EmptyBorder(12, 20, 12, 20));
             label.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-            
+
             if (isSelected) {
                 label.setBackground(ADMIN_PRIMARY);
                 label.setForeground(Color.WHITE);
             } else {
-                label.setBackground(index % 2 == 0 ? 
-                    new Color(248, 248, 248) : Color.WHITE);
+                label.setBackground(index % 2 == 0 ? new Color(248, 248, 248) : Color.WHITE);
                 label.setForeground(TEXT_PRIMARY);
             }
-            
+
             return label;
         }
     }
@@ -439,21 +436,21 @@ public class AdminPanelUI extends JFrame {
     private void loadPendingAccounts() {
         pendingAccountsModel.clear();
         String[][] pendingAccounts = bank.getPendingAccounts();
-        
+
         if (pendingAccounts != null && pendingAccounts.length > 0) {
             for (String[] account : pendingAccounts) {
                 if (account != null && account.length >= 3) {
-                    String displayText = String.format("%s - %s (%s)", 
-                        account[0], account[1], account[2]);
+                    String displayText = String.format("%s - %s (%s)",
+                            account[0], account[1], account[2]);
                     pendingAccountsModel.addElement(displayText);
                 }
             }
         }
-        
+
         if (pendingAccountsModel.isEmpty()) {
             pendingAccountsModel.addElement("No pending accounts for approval");
         }
-        
+
         updateStats();
     }
 
@@ -517,9 +514,9 @@ public class AdminPanelUI extends JFrame {
     }
 
     private void showSearchDialog() {
-        String accountNumber = JOptionPane.showInputDialog(this, 
-            "Enter Account Number to search:", "Account Search", JOptionPane.QUESTION_MESSAGE);
-        
+        String accountNumber = JOptionPane.showInputDialog(this,
+                "Enter Account Number to search:", "Account Search", JOptionPane.QUESTION_MESSAGE);
+
         if (accountNumber != null && !accountNumber.trim().isEmpty()) {
             searchAccount(accountNumber.trim());
         }
@@ -527,45 +524,47 @@ public class AdminPanelUI extends JFrame {
 
     private void showBulkOperationsDialog() {
         int result = JOptionPane.showConfirmDialog(this,
-            "This will approve ALL pending accounts.\n\n" +
-            "Are you sure you want to continue?",
-            "Bulk Account Approval",
-            JOptionPane.YES_NO_OPTION,
-            JOptionPane.WARNING_MESSAGE);
+                "This will approve ALL pending accounts.\n\n" +
+                        "Are you sure you want to continue?",
+                "Bulk Account Approval",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE);
 
         if (result == JOptionPane.YES_OPTION) {
-            showInfo("Bulk Approval", "Bulk approval feature would approve all pending accounts.\nThis feature is under development.");
+            showInfo("Bulk Approval",
+                    "Bulk approval feature would approve all pending accounts.\nThis feature is under development.");
         }
     }
 
     private void showTransactionViewer() {
-        String accountNumber = JOptionPane.showInputDialog(this, 
-            "Enter Account Number to view transactions:", "Transaction Viewer", JOptionPane.QUESTION_MESSAGE);
-        
+        String accountNumber = JOptionPane.showInputDialog(this,
+                "Enter Account Number to view transactions:", "Transaction Viewer", JOptionPane.QUESTION_MESSAGE);
+
         if (accountNumber != null && !accountNumber.trim().isEmpty()) {
             viewAccountTransactions(accountNumber.trim());
         }
     }
 
     private void showReportsDialog() {
-        showInfo("System Reports", "This feature would generate comprehensive banking system reports.\nAvailable reports:\n• Account Activity Summary\n• Transaction Analytics\n• User Growth Reports\n• Financial Overview");
+        showInfo("System Reports",
+                "This feature would generate comprehensive banking system reports.\nAvailable reports:\n• Account Activity Summary\n• Transaction Analytics\n• User Growth Reports\n• Financial Overview");
     }
 
     private void approveAccount(String accountNumber) {
         if (bank.approveAccount(accountNumber)) {
             showSuccess("✅ Account " + accountNumber + " approved successfully!\n\n" +
-                       "• Account status changed to ACTIVE\n" +
-                       "• Initial balance activated\n" +
-                       "• User notified via email\n" +
-                       "• Account ready for transactions");
+                    "• Account status changed to ACTIVE\n" +
+                    "• Initial balance activated\n" +
+                    "• User notified via email\n" +
+                    "• Account ready for transactions");
             loadPendingAccounts();
         } else {
-            showError("❌ Failed to approve account " + accountNumber + 
-                     "\n\nPossible reasons:\n" +
-                     "• Account not found\n" +
-                     "• Account already approved\n" +
-                     "• Database error\n" +
-                     "• Network connection issue");
+            showError("❌ Failed to approve account " + accountNumber +
+                    "\n\nPossible reasons:\n" +
+                    "• Account not found\n" +
+                    "• Account already approved\n" +
+                    "• Database error\n" +
+                    "• Network connection issue");
         }
     }
 
@@ -582,7 +581,7 @@ public class AdminPanelUI extends JFrame {
         Account account = bank.getAccount(accountNumber);
         if (account != null) {
             List<String> transactions = bank.getTransactionHistory(accountNumber);
-            
+
             if (transactions.isEmpty()) {
                 showInfo("No Transactions", "No transactions found for account: " + accountNumber);
                 return;
@@ -598,20 +597,20 @@ public class AdminPanelUI extends JFrame {
             textArea.setFont(new Font("Consolas", Font.PLAIN, 12));
             textArea.setBackground(new Color(30, 30, 30));
             textArea.setForeground(Color.GREEN);
-            
+
             StringBuilder history = new StringBuilder();
             history.append("Transaction History for: ").append(accountNumber).append("\n");
             history.append("Account Holder: ").append(account.getAccountHolderName()).append("\n");
             history.append("Bank: ").append(account.getBankName()).append("\n");
             history.append("Current Balance: ₹").append(String.format("%.2f", account.getBalance())).append("\n\n");
-            
+
             for (String transaction : transactions) {
                 history.append(transaction).append("\n");
             }
-            
+
             textArea.setText(history.toString());
             JScrollPane scrollPane = new JScrollPane(textArea);
-            
+
             transactionDialog.add(scrollPane);
             transactionDialog.setVisible(true);
         } else {
@@ -635,7 +634,7 @@ public class AdminPanelUI extends JFrame {
         JPanel detailsPanel = new JPanel(new GridLayout(0, 1, 8, 8));
         detailsPanel.setBorder(new EmptyBorder(25, 30, 25, 30));
         detailsPanel.setBackground(CARD_COLOR);
-        
+
         addDetailRow(detailsPanel, "👤 Account Holder:", account.getAccountHolderName());
         addDetailRow(detailsPanel, "🔢 Account Number:", account.getAccountNumber());
         addDetailRow(detailsPanel, "🏦 Bank:", account.getBankName());
@@ -646,10 +645,10 @@ public class AdminPanelUI extends JFrame {
         addDetailRow(detailsPanel, "💵 Initial Deposit:", String.format("₹%.2f", account.getInitialDeposit()));
         addDetailRow(detailsPanel, "📊 Status:", getStatusWithColor(account.getStatus()));
         addDetailRow(detailsPanel, "📅 Account Created:", account.getAccountCreationDate().toString());
-        
-        JOptionPane.showMessageDialog(this, detailsPanel, 
-            "Account Details - " + account.getAccountNumber(), 
-            JOptionPane.INFORMATION_MESSAGE);
+
+        JOptionPane.showMessageDialog(this, detailsPanel,
+                "Account Details - " + account.getAccountNumber(),
+                JOptionPane.INFORMATION_MESSAGE);
     }
 
     private String getStatusWithColor(String status) {
@@ -665,15 +664,15 @@ public class AdminPanelUI extends JFrame {
     private void addDetailRow(JPanel panel, String label, String value) {
         JPanel rowPanel = new JPanel(new BorderLayout());
         rowPanel.setBackground(CARD_COLOR);
-        
+
         JLabel keyLabel = new JLabel(label);
         keyLabel.setFont(new Font("Segoe UI", Font.BOLD, 13));
         keyLabel.setForeground(TEXT_SECONDARY);
-        
+
         JLabel valueLabel = new JLabel(value);
         valueLabel.setFont(new Font("Segoe UI", Font.PLAIN, 13));
         valueLabel.setForeground(TEXT_PRIMARY);
-        
+
         rowPanel.add(keyLabel, BorderLayout.WEST);
         rowPanel.add(valueLabel, BorderLayout.CENTER);
         panel.add(rowPanel);
@@ -707,8 +706,8 @@ public class AdminPanelUI extends JFrame {
         panel.add(titleLabel, BorderLayout.NORTH);
         panel.add(messageLabel, BorderLayout.CENTER);
 
-        JOptionPane.showMessageDialog(this, panel, "Admin Panel", 
-            JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(this, panel, "Admin Panel",
+                JOptionPane.INFORMATION_MESSAGE);
     }
 
     class AdminButton extends JButton {
@@ -724,14 +723,14 @@ public class AdminPanelUI extends JFrame {
             setCursor(new Cursor(Cursor.HAND_CURSOR));
             setBorder(new EmptyBorder(12, 20, 12, 20));
             setBorder(BorderFactory.createCompoundBorder(
-                new LineBorder(color.darker(), 1),
-                new EmptyBorder(10, 18, 10, 18)
-            ));
+                    new LineBorder(color.darker(), 1),
+                    new EmptyBorder(10, 18, 10, 18)));
 
             addMouseListener(new MouseAdapter() {
                 public void mouseEntered(MouseEvent evt) {
                     setBackground(color.brighter());
                 }
+
                 public void mouseExited(MouseEvent evt) {
                     setBackground(color);
                 }
