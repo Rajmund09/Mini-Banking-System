@@ -212,7 +212,7 @@ public class BankingAppUI extends JFrame {
             new EmptyBorder(15, 25, 15, 25)
         ));
 
-        JLabel copyrightLabel = new JLabel("© 2024 NeoBank. Secure Banking");
+        JLabel copyrightLabel = new JLabel("© 2025 NeoBank. Secure Banking");
         copyrightLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         copyrightLabel.setForeground(TEXT_SECONDARY);
 
