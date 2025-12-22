@@ -22,7 +22,6 @@ public class BankingAppUI extends JFrame {
     private static final Color TEXT_SECONDARY = new Color(97, 97, 97);
     private static final Color SHADOW_COLOR = new Color(0, 0, 0, 25);
 
-
     private static final Font TITLE_FONT = new Font("Segoe UI", Font.BOLD, 28);
     private static final Font SUBTITLE_FONT = new Font("Segoe UI", Font.PLAIN, 14);
     private static final Font BUTTON_FONT = new Font("Segoe UI", Font.BOLD, 16);
@@ -43,7 +42,7 @@ public class BankingAppUI extends JFrame {
         setSize(600, 800);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        setResizable(true); 
+        setResizable(true);
         setMinimumSize(new Dimension(500, 700));
     }
 
@@ -52,10 +51,10 @@ public class BankingAppUI extends JFrame {
         getContentPane().setBackground(BACKGROUND_COLOR);
 
         add(createModernHeader(), BorderLayout.NORTH);
-        
+
         mainPanel = createMainPanel();
-        add(new JScrollPane(mainPanel), BorderLayout.CENTER); 
-        
+        add(new JScrollPane(mainPanel), BorderLayout.CENTER);
+
         add(createModernFooter(), BorderLayout.SOUTH);
     }
 
@@ -66,16 +65,15 @@ public class BankingAppUI extends JFrame {
                 super.paintComponent(g);
                 Graphics2D g2d = (Graphics2D) g;
                 g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                
+
                 GradientPaint gradient = new GradientPaint(
-                    0, 0, PRIMARY_COLOR, 
-                    getWidth(), getHeight(), SECONDARY_COLOR
-                );
+                        0, 0, PRIMARY_COLOR,
+                        getWidth(), getHeight(), SECONDARY_COLOR);
                 g2d.setPaint(gradient);
                 g2d.fillRect(0, 0, getWidth(), getHeight());
             }
         };
-        
+
         header.setLayout(new BorderLayout());
         header.setPreferredSize(new Dimension(getWidth(), 180));
         header.setBorder(new EmptyBorder(30, 30, 30, 30));
@@ -106,7 +104,7 @@ public class BankingAppUI extends JFrame {
         infoPanel.add(subtitleLabel);
 
         JPanel statsPanel = createHeaderStatsPanel();
-        
+
         header.add(infoPanel, BorderLayout.WEST);
         header.add(statsPanel, BorderLayout.EAST);
 
@@ -160,7 +158,8 @@ public class BankingAppUI extends JFrame {
         welcomeLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
         welcomeLabel.setForeground(TEXT_PRIMARY);
 
-        JLabel descriptionLabel = new JLabel("<html>Manage your finances securely with our modern banking platform. Fast, reliable, and always available.</html>");
+        JLabel descriptionLabel = new JLabel(
+                "<html>Manage your finances securely with our modern banking platform. Fast, reliable, and always available.</html>");
         descriptionLabel.setFont(SUBTITLE_FONT);
         descriptionLabel.setForeground(TEXT_SECONDARY);
 
@@ -177,23 +176,24 @@ public class BankingAppUI extends JFrame {
         gridPanel.setBorder(new EmptyBorder(0, 0, 0, 0));
 
         String[] services = {
-            "CREATE_ACCOUNT", "VIEW_DETAILS", 
-            "DEPOSIT", "WITHDRAW", 
-            "UPDATE_ACCOUNT", "DELETE_ACCOUNT",
-            "TRANSACTION_HISTORY", "ACCOUNT_SETTINGS"
+                "CREATE_ACCOUNT", "VIEW_DETAILS",
+                "DEPOSIT", "WITHDRAW",
+                "UPDATE_ACCOUNT", "DELETE_ACCOUNT",
+                "TRANSACTION_HISTORY", "ACCOUNT_SETTINGS"
         };
 
-        String[] icons = {"📝", "👤", "💰", "💳", "⚙️", "🗑️", "📊", "🔧"};
-        String[] titles = {"Open Account", "Account Details", "Deposit Funds", "Withdraw Cash", "Manage Account", "Close Account", "Transactions", "Settings"};
+        String[] icons = { "📝", "👤", "💰", "💳", "⚙️", "🗑️", "📊", "🔧" };
+        String[] titles = { "Open Account", "Account Details", "Deposit Funds", "Withdraw Cash", "Manage Account",
+                "Close Account", "Transactions", "Settings" };
         String[] descriptions = {
-            "Create new banking account",
-            "View your account information", 
-            "Add money to your account",
-            "Withdraw from your balance",
-            "Update personal details",
-            "Permanently close account",
-            "View transaction history",
-            "Account preferences"
+                "Create new banking account",
+                "View your account information",
+                "Add money to your account",
+                "Withdraw from your balance",
+                "Update personal details",
+                "Permanently close account",
+                "View transaction history",
+                "Account preferences"
         };
 
         for (int i = 0; i < services.length; i++) {
@@ -208,9 +208,8 @@ public class BankingAppUI extends JFrame {
         JPanel footer = new JPanel(new BorderLayout());
         footer.setBackground(BACKGROUND_COLOR);
         footer.setBorder(new CompoundBorder(
-            new MatteBorder(1, 0, 0, 0, new Color(220, 220, 220)),
-            new EmptyBorder(15, 25, 15, 25)
-        ));
+                new MatteBorder(1, 0, 0, 0, new Color(220, 220, 220)),
+                new EmptyBorder(15, 25, 15, 25)));
 
         JLabel copyrightLabel = new JLabel("© 2025 NeoBank. Secure Banking");
         copyrightLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
@@ -224,9 +223,11 @@ public class BankingAppUI extends JFrame {
             public void mouseClicked(MouseEvent evt) {
                 handleAdminLogin();
             }
+
             public void mouseEntered(MouseEvent evt) {
                 adminLabel.setForeground(SECONDARY_COLOR);
             }
+
             public void mouseExited(MouseEvent evt) {
                 adminLabel.setForeground(PRIMARY_COLOR);
             }
@@ -249,13 +250,13 @@ public class BankingAppUI extends JFrame {
         protected void paintComponent(Graphics g) {
             Graphics2D g2d = (Graphics2D) g;
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            
+
             g2d.setColor(SHADOW_COLOR);
-            g2d.fillRoundRect(2, 2, getWidth()-4, getHeight()-4, 20, 20);
-            
+            g2d.fillRoundRect(2, 2, getWidth() - 4, getHeight() - 4, 20, 20);
+
             g2d.setColor(getBackground());
-            g2d.fillRoundRect(0, 0, getWidth()-2, getHeight()-2, 18, 18);
-            
+            g2d.fillRoundRect(0, 0, getWidth() - 2, getHeight() - 2, 18, 18);
+
             super.paintComponent(g);
         }
     }
@@ -265,36 +266,38 @@ public class BankingAppUI extends JFrame {
             setLayout(new BorderLayout());
             setBorder(new EmptyBorder(20, 20, 20, 20));
             setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-            
+
             JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
             topPanel.setOpaque(false);
-            
+
             JLabel iconLabel = new JLabel(icon);
             iconLabel.setFont(new Font("Segoe UI", Font.PLAIN, 24));
-            
+
             JLabel titleLabel = new JLabel(title);
             titleLabel.setFont(CARD_FONT);
             titleLabel.setForeground(TEXT_PRIMARY);
-            
+
             topPanel.add(iconLabel);
             topPanel.add(Box.createHorizontalStrut(10));
             topPanel.add(titleLabel);
-            
+
             JLabel descLabel = new JLabel("<html><div style='width: 120px;'>" + description + "</div></html>");
             descLabel.setFont(SUBTITLE_FONT);
             descLabel.setForeground(TEXT_SECONDARY);
-            
+
             add(topPanel, BorderLayout.NORTH);
             add(Box.createVerticalStrut(10));
             add(descLabel, BorderLayout.CENTER);
-            
+
             addMouseListener(new MouseAdapter() {
                 public void mouseEntered(MouseEvent e) {
                     setBackground(new Color(245, 245, 245));
                 }
+
                 public void mouseExited(MouseEvent e) {
                     setBackground(CARD_COLOR);
                 }
+
                 public void mouseClicked(MouseEvent e) {
                     handleServiceAction(action);
                 }
@@ -367,21 +370,20 @@ public class BankingAppUI extends JFrame {
         JTextField dobField = createModernTextField();
         JTextField emailField = createModernTextField();
         JTextField phoneField = createModernTextField();
-        
+
         JPanel bankPanel = new JPanel(new BorderLayout());
         bankPanel.setBackground(CARD_COLOR);
         JLabel bankLabel = new JLabel("Select Bank:");
         bankLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
         bankLabel.setForeground(TEXT_PRIMARY);
-        
+
         JComboBox<String> bankComboBox = new JComboBox<>(bank.getAvailableBanks());
         bankComboBox.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         bankComboBox.setBackground(Color.WHITE);
         bankComboBox.setBorder(BorderFactory.createCompoundBorder(
-            new LineBorder(new Color(200, 200, 200)),
-            new EmptyBorder(8, 12, 8, 12)
-        ));
-        
+                new LineBorder(new Color(200, 200, 200)),
+                new EmptyBorder(8, 12, 8, 12)));
+
         bankPanel.add(bankLabel, BorderLayout.NORTH);
         bankPanel.add(Box.createVerticalStrut(5));
         bankPanel.add(bankComboBox, BorderLayout.CENTER);
@@ -391,27 +393,25 @@ public class BankingAppUI extends JFrame {
         JLabel typeLabel = new JLabel("Account Type:");
         typeLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
         typeLabel.setForeground(TEXT_PRIMARY);
-        
-        JComboBox<String> typeComboBox = new JComboBox<>(new String[]{"Savings", "Salary", "Business"});
+
+        JComboBox<String> typeComboBox = new JComboBox<>(new String[] { "Savings", "Salary", "Business" });
         typeComboBox.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         typeComboBox.setBackground(Color.WHITE);
         typeComboBox.setBorder(BorderFactory.createCompoundBorder(
-            new LineBorder(new Color(200, 200, 200)),
-            new EmptyBorder(8, 12, 8, 12)
-        ));
-        
+                new LineBorder(new Color(200, 200, 200)),
+                new EmptyBorder(8, 12, 8, 12)));
+
         typePanel.add(typeLabel, BorderLayout.NORTH);
         typePanel.add(Box.createVerticalStrut(5));
         typePanel.add(typeComboBox, BorderLayout.CENTER);
 
         JTextField depositField = createModernTextField();
-        
+
         JPasswordField pinField = new JPasswordField();
         pinField.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         pinField.setBorder(BorderFactory.createCompoundBorder(
-            new LineBorder(new Color(200, 200, 200)),
-            new EmptyBorder(8, 12, 8, 12)
-        ));
+                new LineBorder(new Color(200, 200, 200)),
+                new EmptyBorder(8, 12, 8, 12)));
 
         formPanel.add(createFormField("Full Name:", nameField));
         formPanel.add(Box.createVerticalStrut(15));
@@ -447,18 +447,17 @@ public class BankingAppUI extends JFrame {
                     int pin = Integer.parseInt(new String(pinField.getPassword()));
 
                     String accountNumber = bank.createAccount(
-                        nameField.getText().trim(), pin, emailField.getText().trim(), 
-                        phoneField.getText().trim(), dateOfBirth, selectedBank, 
-                        initialDeposit, accountType
-                    );
+                            nameField.getText().trim(), pin, emailField.getText().trim(),
+                            phoneField.getText().trim(), dateOfBirth, selectedBank,
+                            initialDeposit, accountType);
 
                     if (accountNumber != null) {
                         showModernSuccess("Account created successfully!\n\n" +
-                            "Account Number: " + accountNumber + "\n" +
-                            "Bank: " + selectedBank + "\n" +
-                            "Initial Deposit: ₹" + initialDeposit + "\n" +
-                            "Status: PENDING APPROVAL\n\n" +
-                            "A welcome email has been sent to your registered email address.");
+                                "Account Number: " + accountNumber + "\n" +
+                                "Bank: " + selectedBank + "\n" +
+                                "Initial Deposit: ₹" + initialDeposit + "\n" +
+                                "Status: PENDING APPROVAL\n\n" +
+                                "A welcome email has been sent to your registered email address.");
                         createAccountDialog.dispose();
                     } else {
                         showModernError("Failed to create account. Please try again.");
@@ -482,8 +481,8 @@ public class BankingAppUI extends JFrame {
         createAccountDialog.setVisible(true);
     }
 
-    private boolean validateAccountCreation(JTextField name, JTextField dob, JTextField email, 
-                                          JTextField phone, JTextField deposit, JPasswordField pin) {
+    private boolean validateAccountCreation(JTextField name, JTextField dob, JTextField email,
+            JTextField phone, JTextField deposit, JPasswordField pin) {
         if (name.getText().trim().isEmpty()) {
             showModernError("Please enter your full name.");
             return false;
@@ -508,7 +507,7 @@ public class BankingAppUI extends JFrame {
             showModernError("PIN must be exactly 4 digits.");
             return false;
         }
-        
+
         try {
             double depositAmount = Double.parseDouble(deposit.getText().trim());
             if (depositAmount < 1000) {
@@ -519,7 +518,7 @@ public class BankingAppUI extends JFrame {
             showModernError("Please enter a valid deposit amount.");
             return false;
         }
-        
+
         return true;
     }
 
@@ -533,9 +532,9 @@ public class BankingAppUI extends JFrame {
     private void handleDeposit() {
         Account account = authenticateUser("Deposit Funds");
         if (account != null) {
-            String amountStr = JOptionPane.showInputDialog(this, 
-                "Enter amount to deposit:", "Deposit Funds", JOptionPane.QUESTION_MESSAGE);
-            
+            String amountStr = JOptionPane.showInputDialog(this,
+                    "Enter amount to deposit:", "Deposit Funds", JOptionPane.QUESTION_MESSAGE);
+
             if (amountStr != null && !amountStr.trim().isEmpty()) {
                 try {
                     double amount = Double.parseDouble(amountStr.trim());
@@ -543,12 +542,12 @@ public class BankingAppUI extends JFrame {
                         showModernError("Please enter a positive amount.");
                         return;
                     }
-                    
+
                     account.deposit(amount);
                     bank.updateAccountBalance(account, "Deposit", amount);
-                    showModernSuccess(String.format("Successfully deposited ₹%.2f\nNew Balance: ₹%.2f", 
-                        amount, account.getBalance()));
-                        
+                    showModernSuccess(String.format("Successfully deposited ₹%.2f\nNew Balance: ₹%.2f",
+                            amount, account.getBalance()));
+
                 } catch (NumberFormatException e) {
                     showModernError("Please enter a valid amount.");
                 }
@@ -559,9 +558,9 @@ public class BankingAppUI extends JFrame {
     private void handleWithdraw() {
         Account account = authenticateUser("Withdraw Funds");
         if (account != null) {
-            String amountStr = JOptionPane.showInputDialog(this, 
-                "Enter amount to withdraw:", "Withdraw Funds", JOptionPane.QUESTION_MESSAGE);
-            
+            String amountStr = JOptionPane.showInputDialog(this,
+                    "Enter amount to withdraw:", "Withdraw Funds", JOptionPane.QUESTION_MESSAGE);
+
             if (amountStr != null && !amountStr.trim().isEmpty()) {
                 try {
                     double amount = Double.parseDouble(amountStr.trim());
@@ -569,15 +568,15 @@ public class BankingAppUI extends JFrame {
                         showModernError("Please enter a positive amount.");
                         return;
                     }
-                    
+
                     if (account.withdraw(amount)) {
                         bank.updateAccountBalance(account, "Withdrawal", amount);
-                        showModernSuccess(String.format("Successfully withdrew ₹%.2f\nNew Balance: ₹%.2f", 
-                            amount, account.getBalance()));
+                        showModernSuccess(String.format("Successfully withdrew ₹%.2f\nNew Balance: ₹%.2f",
+                                amount, account.getBalance()));
                     } else {
                         showModernError("Withdrawal failed. Check your balance.");
                     }
-                        
+
                 } catch (NumberFormatException e) {
                     showModernError("Please enter a valid amount.");
                 }
@@ -596,15 +595,15 @@ public class BankingAppUI extends JFrame {
         Account account = authenticateUser("Delete Account");
         if (account != null) {
             int confirm = JOptionPane.showConfirmDialog(this,
-                "Are you sure you want to delete this account?\n\n" +
-                "Account: " + account.getAccountHolderName() + "\n" +
-                "Number: " + account.getAccountNumber() + "\n" +
-                "Bank: " + account.getBankName() + "\n" +
-                "Status: " + account.getStatus() + "\n\n" +
-                "This action cannot be undone!",
-                "Confirm Account Deletion",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.WARNING_MESSAGE);
+                    "Are you sure you want to delete this account?\n\n" +
+                            "Account: " + account.getAccountHolderName() + "\n" +
+                            "Number: " + account.getAccountNumber() + "\n" +
+                            "Bank: " + account.getBankName() + "\n" +
+                            "Status: " + account.getStatus() + "\n\n" +
+                            "This action cannot be undone!",
+                    "Confirm Account Deletion",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.WARNING_MESSAGE);
 
             if (confirm == JOptionPane.YES_OPTION) {
                 if (bank.deleteAccount(account.getAccountNumber())) {
@@ -620,7 +619,7 @@ public class BankingAppUI extends JFrame {
         Account account = authenticateUser("Transaction History");
         if (account != null) {
             List<String> transactions = bank.getTransactionHistory(account.getAccountNumber());
-            
+
             if (transactions.isEmpty()) {
                 showModernInfo("Transaction History", "No transactions found for this account.");
                 return;
@@ -637,37 +636,38 @@ public class BankingAppUI extends JFrame {
             textArea.setFont(new Font("Consolas", Font.PLAIN, 12));
             textArea.setBackground(new Color(30, 30, 30));
             textArea.setForeground(Color.GREEN);
-            
+
             StringBuilder history = new StringBuilder();
             history.append("Transaction History for: ").append(account.getAccountNumber()).append("\n");
             history.append("Account Holder: ").append(account.getAccountHolderName()).append("\n");
             history.append("Bank: ").append(account.getBankName()).append("\n\n");
-            
+
             for (String transaction : transactions) {
                 history.append(transaction).append("\n");
             }
-            
+
             textArea.setText(history.toString());
             JScrollPane scrollPane = new JScrollPane(textArea);
-            
+
             historyDialog.add(scrollPane);
             historyDialog.setVisible(true);
         }
     }
 
     private void handleAccountSettings() {
-        showModernInfo("Account Settings", "This feature allows you to manage your account preferences and security settings.");
+        showModernInfo("Account Settings",
+                "This feature allows you to manage your account preferences and security settings.");
     }
 
     private void showUpdateOptions(Account account) {
-        String[] options = {"Name", "Email", "Phone Number", "PIN"};
+        String[] options = { "Name", "Email", "Phone Number", "PIN" };
         String choice = (String) JOptionPane.showInputDialog(this,
-            "What would you like to update?",
-            "Update Account Details",
-            JOptionPane.QUESTION_MESSAGE,
-            null,
-            options,
-            options[0]);
+                "What would you like to update?",
+                "Update Account Details",
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[0]);
 
         if (choice != null) {
             handleFieldUpdate(account, choice);
@@ -677,7 +677,7 @@ public class BankingAppUI extends JFrame {
     private void handleFieldUpdate(Account account, String field) {
         String currentValue = "";
         String fieldName = "";
-        
+
         switch (field) {
             case "Name":
                 currentValue = account.getAccountHolderName();
@@ -697,18 +697,19 @@ public class BankingAppUI extends JFrame {
                 break;
         }
 
-        String newValue = JOptionPane.showInputDialog(this, 
-            "Current " + field + ": " + currentValue + "\nEnter new " + field.toLowerCase() + ":",
-            "Update " + field, JOptionPane.QUESTION_MESSAGE);
-        
+        String newValue = JOptionPane.showInputDialog(this,
+                "Current " + field + ": " + currentValue + "\nEnter new " + field.toLowerCase() + ":",
+                "Update " + field, JOptionPane.QUESTION_MESSAGE);
+
         if (newValue != null && !newValue.trim().isEmpty()) {
             String otp = bank.generateAndStoreOTP(account.getAccountNumber());
             if (otp != null) {
                 String enteredOTP = JOptionPane.showInputDialog(this,
-                    "For security, please enter the OTP sent to your phone:\n(OTP: " + otp + ")",
-                    "OTP Verification", JOptionPane.QUESTION_MESSAGE);
-                
-                if (enteredOTP != null && bank.updateAccountDetailsWithOTP(account, fieldName, newValue.trim(), enteredOTP)) {
+                        "For security, please enter the OTP sent to your phone:\n(OTP: " + otp + ")",
+                        "OTP Verification", JOptionPane.QUESTION_MESSAGE);
+
+                if (enteredOTP != null
+                        && bank.updateAccountDetailsWithOTP(account, fieldName, newValue.trim(), enteredOTP)) {
                     showModernSuccess(field + " updated successfully!");
                 } else {
                     showModernError("OTP verification failed. Update cancelled.");
@@ -728,9 +729,8 @@ public class BankingAppUI extends JFrame {
         JPasswordField pinField = new JPasswordField();
         pinField.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         pinField.setBorder(BorderFactory.createCompoundBorder(
-            new LineBorder(new Color(200, 200, 200)),
-            new EmptyBorder(8, 12, 8, 12)
-        ));
+                new LineBorder(new Color(200, 200, 200)),
+                new EmptyBorder(8, 12, 8, 12)));
 
         authPanel.add(new JLabel("Account Number:"));
         authPanel.add(accNumField);
@@ -744,7 +744,7 @@ public class BankingAppUI extends JFrame {
             try {
                 String accNum = accNumField.getText().trim();
                 int pin = Integer.parseInt(new String(pinField.getPassword()).trim());
-                
+
                 Account account = bank.login(accNum, pin);
                 if (account != null) {
                     return account;
@@ -762,7 +762,7 @@ public class BankingAppUI extends JFrame {
         JPanel detailsPanel = new JPanel(new GridLayout(0, 1, 10, 5));
         detailsPanel.setBorder(new EmptyBorder(25, 30, 25, 30));
         detailsPanel.setBackground(CARD_COLOR);
-        
+
         addDetailRow(detailsPanel, "👤 Account Holder:", account.getAccountHolderName());
         addDetailRow(detailsPanel, "🔢 Account Number:", account.getAccountNumber());
         addDetailRow(detailsPanel, "🏦 Bank:", account.getBankName());
@@ -773,10 +773,10 @@ public class BankingAppUI extends JFrame {
         addDetailRow(detailsPanel, "💵 Initial Deposit:", String.format("₹%.2f", account.getInitialDeposit()));
         addDetailRow(detailsPanel, "📊 Status:", getStatusWithColor(account.getStatus()));
         addDetailRow(detailsPanel, "📅 Account Created:", account.getAccountCreationDate().toString());
-        
-        JOptionPane.showMessageDialog(this, detailsPanel, 
-            "Account Details - " + account.getAccountNumber(), 
-            JOptionPane.INFORMATION_MESSAGE);
+
+        JOptionPane.showMessageDialog(this, detailsPanel,
+                "Account Details - " + account.getAccountNumber(),
+                JOptionPane.INFORMATION_MESSAGE);
     }
 
     private String getStatusWithColor(String status) {
@@ -790,15 +790,15 @@ public class BankingAppUI extends JFrame {
     private void addDetailRow(JPanel panel, String label, String value) {
         JPanel rowPanel = new JPanel(new BorderLayout());
         rowPanel.setBackground(CARD_COLOR);
-        
+
         JLabel keyLabel = new JLabel(label);
         keyLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
         keyLabel.setForeground(TEXT_SECONDARY);
-        
+
         JLabel valueLabel = new JLabel(value);
         valueLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         valueLabel.setForeground(TEXT_PRIMARY);
-        
+
         rowPanel.add(keyLabel, BorderLayout.WEST);
         rowPanel.add(valueLabel, BorderLayout.CENTER);
         panel.add(rowPanel);
@@ -808,31 +808,30 @@ public class BankingAppUI extends JFrame {
         JTextField textField = new JTextField();
         textField.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         textField.setBorder(BorderFactory.createCompoundBorder(
-            new LineBorder(new Color(200, 200, 200)),
-            new EmptyBorder(8, 12, 8, 12)
-        ));
+                new LineBorder(new Color(200, 200, 200)),
+                new EmptyBorder(8, 12, 8, 12)));
         return textField;
     }
 
     private JPanel createFormField(String label, JComponent field) {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(CARD_COLOR);
-        
+
         JLabel fieldLabel = new JLabel(label);
         fieldLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
         fieldLabel.setForeground(TEXT_PRIMARY);
-        
+
         panel.add(fieldLabel, BorderLayout.NORTH);
         panel.add(Box.createVerticalStrut(5));
         panel.add(field, BorderLayout.CENTER);
-        
+
         return panel;
     }
 
     private void handleAdminLogin() {
-        String password = JOptionPane.showInputDialog(this, 
-            "Enter Admin Password:", "Admin Access", JOptionPane.PLAIN_MESSAGE);
-            
+        String password = JOptionPane.showInputDialog(this,
+                "Enter Admin Password:", "Admin Access", JOptionPane.PLAIN_MESSAGE);
+
         if ("admin123".equals(password)) {
             SwingUtilities.invokeLater(() -> {
                 AdminPanelUI adminUI = new AdminPanelUI(bank);
@@ -864,7 +863,8 @@ public class BankingAppUI extends JFrame {
         titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
         titleLabel.setForeground(color);
 
-        JLabel messageLabel = new JLabel("<html><div style='width: 300px; text-align: center;'>" + message + "</div></html>");
+        JLabel messageLabel = new JLabel(
+                "<html><div style='width: 300px; text-align: center;'>" + message + "</div></html>");
         messageLabel.setFont(SUBTITLE_FONT);
         messageLabel.setForeground(TEXT_SECONDARY);
         messageLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -872,8 +872,8 @@ public class BankingAppUI extends JFrame {
         panel.add(titleLabel, BorderLayout.NORTH);
         panel.add(messageLabel, BorderLayout.CENTER);
 
-        JOptionPane.showMessageDialog(this, panel, "NeoBank", 
-            JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(this, panel, "NeoBank",
+                JOptionPane.INFORMATION_MESSAGE);
     }
 
     class ModernButton extends JButton {
@@ -893,6 +893,7 @@ public class BankingAppUI extends JFrame {
                 public void mouseEntered(MouseEvent evt) {
                     setBackground(color.brighter());
                 }
+
                 public void mouseExited(MouseEvent evt) {
                     setBackground(color);
                 }
