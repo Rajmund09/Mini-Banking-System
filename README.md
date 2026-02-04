@@ -4,7 +4,6 @@ A console-based Banking Management System built using **Java**, **Swing/AWT**, a
 This project simulates a real-world banking workflow including account creation, authentication, deposits, withdrawals, transfers, transaction history, and admin approval.
 
 ---
-
 ## 🚀 Features
 
 ### 🧑‍💼 User Features
