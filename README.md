@@ -123,5 +123,3 @@ Integrate Java with MySQL
 Understand full-stack application architecture
 
 Use secure coding practices
-
-
