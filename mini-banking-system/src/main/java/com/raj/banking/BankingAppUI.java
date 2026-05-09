@@ -221,22 +221,22 @@ public class BankingAppUI extends JFrame {
         String[] services = {
                 "CREATE_ACCOUNT", "VIEW_DETAILS",
                 "DEPOSIT", "WITHDRAW",
-                "UPDATE_ACCOUNT", "DELETE_ACCOUNT",
-                "TRANSACTION_HISTORY", "ACCOUNT_SETTINGS"
+                "TRANSFER_MONEY", "UPDATE_ACCOUNT",
+                "TRANSACTION_HISTORY", "DELETE_ACCOUNT"
         };
 
-        String[] icons = { "📝", "👤", "💰", "💳", "⚙️", "🗑️", "📊", "🔧" };
-        String[] titles = { "Open Account", "Account Details", "Deposit Funds", "Withdraw Cash", "Manage Account",
-                "Close Account", "Transactions", "Settings" };
+        String[] icons = { "📝", "👤", "💰", "💳", "💸", "⚙️", "📊", "🗑️" };
+        String[] titles = { "Open Account", "Account Details", "Deposit Funds", "Withdraw Cash", "Transfer Money",
+                "Manage Account", "Transactions", "Close Account" };
         String[] descriptions = {
                 "Create new banking account",
                 "View your account information",
                 "Add money to your account",
                 "Withdraw from your balance",
+                "Send money to another user",
                 "Update personal details",
-                "Permanently close account",
                 "View transaction history",
-                "Account preferences"
+                "Permanently close account"
         };
 
         for (int i = 0; i < services.length; i++) {
@@ -371,8 +371,8 @@ public class BankingAppUI extends JFrame {
             case "TRANSACTION_HISTORY":
                 handleTransactionHistory();
                 break;
-            case "ACCOUNT_SETTINGS":
-                handleAccountSettings();
+            case "TRANSFER_MONEY":
+                handleTransferMoney();
                 break;
         }
     }
@@ -697,6 +697,47 @@ public class BankingAppUI extends JFrame {
         }
     }
 
+    private void handleTransferMoney() {
+        Account senderAccount = authenticateUser("Transfer Money");
+        if (senderAccount != null) {
+            JPanel transferPanel = new JPanel(new GridLayout(2, 2, 10, 10));
+            transferPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
+            transferPanel.setBackground(CARD_COLOR);
+
+            JTextField recipientField = createModernTextField();
+            JTextField amountField = createModernTextField();
+
+            transferPanel.add(new JLabel("Recipient Account #:"));
+            transferPanel.add(recipientField);
+            transferPanel.add(new JLabel("Amount (₹):"));
+            transferPanel.add(amountField);
+
+            int result = JOptionPane.showConfirmDialog(this, transferPanel, "Initiate Money Transfer",
+                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+            if (result == JOptionPane.OK_OPTION) {
+                try {
+                    String recipientAcc = recipientField.getText().trim();
+                    double amount = Double.parseDouble(amountField.getText().trim());
+
+                    if (amount <= 0) {
+                        showModernError("Please enter a positive amount.");
+                        return;
+                    }
+
+                    if (bank.transferMoney(senderAccount.getAccountNumber(), recipientAcc, amount, senderAccount.getPin())) {
+                        showModernSuccess(String.format("Successfully transferred ₹%.2f to %s\nNew Balance: ₹%.2f",
+                                amount, recipientAcc, senderAccount.getBalance()));
+                    } else {
+                        showModernError("Transfer failed. Check recipient account or your balance.");
+                    }
+                } catch (NumberFormatException e) {
+                    showModernError("Please enter a valid numeric amount.");
+                }
+            }
+        }
+    }
+
     private void handleAccountSettings() {
         showModernInfo("Account Settings",
                 "This feature allows you to manage your account preferences and security settings.");
@@ -748,7 +789,7 @@ public class BankingAppUI extends JFrame {
             String otp = bank.generateAndStoreOTP(account.getAccountNumber());
             if (otp != null) {
                 String enteredOTP = JOptionPane.showInputDialog(this,
-                        "For security, please enter the OTP sent to your phone:\n(OTP: " + otp + ")",
+                        "For security, please enter the 6-digit OTP sent to your email:",
                         "OTP Verification", JOptionPane.QUESTION_MESSAGE);
 
                 if (enteredOTP != null
