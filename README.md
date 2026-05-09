@@ -1,125 +1,93 @@
-# Mini Banking System (Java + MySQL)
+# 🏦 NeoBank - Modern Banking Management System
 
-A console-based Banking Management System built using **Java**, **Swing/AWT**, and **MySQL** with **JDBC integration**.  
-This project simulates a real-world banking workflow including account creation, authentication, deposits, withdrawals, transfers, transaction history, and admin approval.
+[![Java](https://img.shields.io/badge/Java-17%2B-orange.svg)](https://www.oracle.com/java/)
+[![MySQL](https://img.shields.io/badge/MySQL-8.0-blue.svg)](https://www.mysql.com/)
+[![Swing](https://img.shields.io/badge/UI-Swing%2FAWT-red.svg)](https://docs.oracle.com/javase/tutorial/uiswing/)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
----
-## 🚀 Features
-
-### 🧑‍💼 User Features
-- Create a new bank account (requires admin approval)
-- Secure login with password verification
-- Deposit money
-- Withdraw money
-- Balance inquiry
-- Transfer money to another user
-- Update user details after account creation
-- View full transaction history
-- Automated email notifications for each action
-
-### 🔐 Admin Features
-- Approve or reject new account requests  
-- View all users  
-- Modify or delete user accounts  
-- Monitor transactions  
-- Overall system control  
+A professional, feature-rich Banking Management System built with **Java Swing**, **JDBC**, and **MySQL**. This system features a dual-interface architecture for both customers and bank administrators, providing a complete banking workflow from account application to transaction management.
 
 ---
 
-## 🛠️ Tech Stack
+## 🚀 Key Features
 
-### **Languages**
-- Java (Core + OOP)
-- SQL (MySQL)
+### 👤 Customer Features
+- **Modern Dashboard**: Intuitive, glassmorphism-inspired UI with live clock.
+- **Account Creation**: Interactive application form (requires admin activation).
+- **Secure Banking**: Deposit, Withdraw, and **Peer-to-Peer Transfers**.
+- **Real-time Notifications**: Automated email alerts for all account activities.
+- **OTP Verification**: Secure 2FA for updating sensitive account details.
+- **Transaction History**: Comprehensive log of all financial activities.
 
-### **Frameworks & Libraries**
-- Swing / AWT — for front-end GUI  
-- JDBC — database connectivity  
-- JavaMail API — automated email notifications  
-
-### **Tools & Software**
-- MySQL Workbench  
-- IntelliJ IDEA / VS Code / Eclipse  
-- Git & GitHub  
-
----
-
-## 📂 Project Architecture
-
-/src
-├── ui/ # Swing UI components
-├── database/ # JDBC connection + SQL operations
-├── models/ # User, Account, Transaction classes
-├── services/ # Business logic (deposit, withdraw, transfer)
-├── admin/ # Admin approval, management panel
-└── utils/ # Email service, validation, helpers
-
+### 👨‍💼 Admin Features
+- **Smart Approvals**: Manage pending account requests with a professional JTable interface.
+- **Bulk Operations**: One-click approval for all pending applications.
+- **Live Analytics**: Real-time system stats (Total users, System balance, Transaction volume).
+- **Account Management**: Search, view, and reject/delete accounts.
+- **Transaction Monitoring**: Global view of all system transactions.
 
 ---
 
-## 🔧 Setup Instructions
+## 🏗️ Project Architecture
 
-### 1️⃣ Clone the Repository
+```text
+src/main/java/com/raj/banking/
+├── Bank.java           # Core Service Layer (JDBC, Email, Business Logic)
+├── Account.java        # Domain Model (Account Entity)
+├── BankingAppUI.java   # Customer Graphical Interface
+├── AdminPanelUI.java   # Administrator Management Panel
+└── Main.java           # Console-based Interface
+```
+
+---
+
+## 🔧 Setup & Installation
+
+### 1️⃣ Prerequisites
+- **Java JDK 17** or higher.
+- **MySQL Server 8.0**.
+- **Maven** (for dependency management).
+
+### 2️⃣ Database Configuration
+Create a new database named `bank_db` in your MySQL instance:
+```sql
+CREATE DATABASE bank_db;
+```
+*Note: The system automatically generates all necessary tables (`accounts`, `transactions`) on the first run.*
+
+### 3️⃣ Configure Credentials
+1. Navigate to `src/main/resources/`.
+2. Create or edit `config.properties`.
+3. Add your credentials:
+```properties
+db.url=jdbc:mysql://localhost:3306/bank_db
+db.user=your_mysql_user
+db.password=your_mysql_password
+email.username=your_gmail@gmail.com
+email.password=your_gmail_app_password
+```
+> [!IMPORTANT]
+> To send emails, use a **Gmail App Password**. Regular passwords will not work due to Google's security policies.
+
+### 4️⃣ Run the Application
+You can run the application using Maven or your favorite IDE:
 ```bash
-git clone https://github.com/Rajmund09/mini-banking-system.git
-cd mini-banking-system
+mvn clean compile
+mvn exec:java -Dexec.mainClass="com.raj.banking.BankingAppUI"
+```
 
-2️⃣Configure MySQL Database
+---
 
-Create a database:
+## 🛡️ Security Features
+- **PIN Authentication**: All customer actions require a 4-digit PIN.
+- **Externalized Config**: Sensitive credentials are kept in a git-ignored properties file.
+- **Atomic Transactions**: Multi-step operations (like transfers) use SQL transactions with rollback support.
+- **OTP Validation**: 6-digit one-time passwords for profile updates.
 
-CREATE DATABASE bank_system;
+---
 
+## 👨‍💻 Developed By
+**Rajmund09** - *Initial Work & Architecture*
 
-Import the provided .sql file (tables + sample data).
-
-3️⃣ Update Database Credentials
-
-Inside DatabaseConnection.java, update:
-
-String url = "jdbc:mysql://localhost:3306/bank_system";
-String username = "root";
-String password = "YOUR_PASSWORD";
-
-4️⃣ Run the Project
-
-Compile & run:
-
-javac Main.java
-java Main
-
-### 📧 Email Integration
-
-The project uses JavaMail API to send:
-
-Account approval mails
-
-Transaction alerts
-
-Password change notifications
-
-Setup your email & app password inside EmailService.java.
-
-### 🔒 Security Features
-
-Password hashing
-
-Data validation
-
-Admin-only operations
-
-Protected database access
-
-Email verification for actions
-
-### 🎯 Project Objectives
-
-Implement core OOP concepts
-
-Build a real-world banking workflow
-
-Integrate Java with MySQL
-
-Understand full-stack application architecture
-
-Use secure coding practices
+---
+*Developed for educational purposes to demonstrate Java OOP, JDBC integration, and Desktop UI design.*
