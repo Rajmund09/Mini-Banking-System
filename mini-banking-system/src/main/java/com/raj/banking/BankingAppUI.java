@@ -32,9 +32,45 @@ public class BankingAppUI extends JFrame {
     private DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     public BankingAppUI() {
+        showSplashScreen();
         initializeFrame();
         setupUI();
+        startClock();
         applyModernStyling();
+    }
+
+    private void showSplashScreen() {
+        JWindow splash = new JWindow();
+        JPanel content = new JPanel(new BorderLayout());
+        content.setBackground(PRIMARY_COLOR);
+        content.setBorder(new LineBorder(SECONDARY_COLOR, 2));
+
+        JLabel label = new JLabel("🏦 NeoBank", SwingConstants.CENTER);
+        label.setFont(new Font("Segoe UI", Font.BOLD, 48));
+        label.setForeground(Color.WHITE);
+
+        JLabel loading = new JLabel("Initialising Secure Systems...", SwingConstants.CENTER);
+        loading.setFont(new Font("Segoe UI", Font.ITALIC, 14));
+        loading.setForeground(new Color(255, 255, 255, 200));
+
+        content.add(label, BorderLayout.CENTER);
+        content.add(loading, BorderLayout.SOUTH);
+        splash.setContentPane(content);
+        splash.setSize(450, 300);
+        splash.setLocationRelativeTo(null);
+        splash.setVisible(true);
+
+        try { Thread.sleep(1500); } catch (InterruptedException e) {}
+        splash.dispose();
+    }
+
+    private JLabel timeLabel;
+    private void startClock() {
+        Timer timer = new Timer(1000, e -> {
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
+            timeLabel.setText("🕒 " + dtf.format(java.time.LocalTime.now()));
+        });
+        timer.start();
     }
 
     private void initializeFrame() {
@@ -127,9 +163,16 @@ public class BankingAppUI extends JFrame {
         availabilityLabel.setForeground(Color.WHITE);
         availabilityLabel.setAlignmentX(Component.RIGHT_ALIGNMENT);
 
+        timeLabel = new JLabel("🕒 00:00:00");
+        timeLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        timeLabel.setForeground(Color.WHITE);
+        timeLabel.setAlignmentX(Component.RIGHT_ALIGNMENT);
+
         statsPanel.add(securityLabel);
         statsPanel.add(Box.createVerticalStrut(5));
         statsPanel.add(availabilityLabel);
+        statsPanel.add(Box.createVerticalStrut(5));
+        statsPanel.add(timeLabel);
 
         return statsPanel;
     }
