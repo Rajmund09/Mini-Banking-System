@@ -21,7 +21,7 @@ public class Account {
 
     public Account(String accountNumber, String accountHolderName, int pin, double initialBalance,
             String email, String phoneNumber, String status, LocalDate dateOfBirth, String bankName,
-            double initialDeposit, String accountType) {
+            double initialDeposit, String accountType, LocalDate accountCreationDate) {
         this.accountNumber = accountNumber;
         this.accountHolderName = accountHolderName;
         this.pin = pin;
@@ -33,7 +33,7 @@ public class Account {
         this.bankName = bankName;
         this.initialDeposit = initialDeposit;
         this.accountType = accountType;
-        this.accountCreationDate = LocalDate.now();
+        this.accountCreationDate = accountCreationDate;
         this.otp = null;
     }
 
