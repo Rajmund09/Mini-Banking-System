@@ -13,14 +13,14 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Bank {
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/bank_db";
-    private static final String USER = "root";
-    private static final String PASS = "Raj@77725";
+    private static String DB_URL;
+    private static String USER;
+    private static String PASS;
 
-    private static final String EMAIL_USERNAME = "prabhushankarmund@gmail.com";
-    private static final String EMAIL_PASSWORD = "hbcs lpih hzez pgum";
-    private static final String EMAIL_HOST = "smtp.gmail.com";
-    private static final String EMAIL_PORT = "587";
+    private static String EMAIL_USERNAME;
+    private static String EMAIL_PASSWORD;
+    private static String EMAIL_HOST;
+    private static String EMAIL_PORT;
 
     private static final String[] AVAILABLE_BANKS = {
         "State Bank of India", "HDFC Bank", "ICICI Bank", "Axis Bank",
@@ -30,6 +30,7 @@ public class Bank {
     private final ExecutorService emailExecutor = Executors.newSingleThreadExecutor();
 
     public Bank() {
+        loadConfig();
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
@@ -37,6 +38,34 @@ public class Bank {
             System.exit(1);
         }
         initializeDatabase();
+    }
+
+    private void loadConfig() {
+        Properties prop = new Properties();
+        try (java.io.InputStream input = getClass().getClassLoader().getResourceAsStream("config.properties")) {
+            if (input == null) {
+                System.out.println("Sorry, unable to find config.properties. Using defaults.");
+                // Default values if file not found
+                DB_URL = "jdbc:mysql://localhost:3306/bank_db";
+                USER = "root";
+                PASS = "Raj@77725";
+                EMAIL_USERNAME = "prabhushankarmund@gmail.com";
+                EMAIL_PASSWORD = "hbcs lpih hzez pgum";
+                EMAIL_HOST = "smtp.gmail.com";
+                EMAIL_PORT = "587";
+                return;
+            }
+            prop.load(input);
+            DB_URL = prop.getProperty("db.url");
+            USER = prop.getProperty("db.user");
+            PASS = prop.getProperty("db.password");
+            EMAIL_USERNAME = prop.getProperty("email.username");
+            EMAIL_PASSWORD = prop.getProperty("email.password");
+            EMAIL_HOST = prop.getProperty("email.host", "smtp.gmail.com");
+            EMAIL_PORT = prop.getProperty("email.port", "587");
+        } catch (java.io.IOException ex) {
+            ex.printStackTrace();
+        }
     }
 
     private void initializeDatabase() {
