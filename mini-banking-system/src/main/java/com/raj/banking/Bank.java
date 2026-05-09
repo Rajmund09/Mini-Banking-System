@@ -477,6 +477,9 @@ public class Bank {
         Date dobSql = rs.getDate("date_of_birth");
         LocalDate dob = (dobSql != null) ? dobSql.toLocalDate() : null;
 
+        Date creationDateSql = rs.getDate("account_creation_date");
+        LocalDate creationDate = (creationDateSql != null) ? creationDateSql.toLocalDate() : LocalDate.now();
+
         return new Account(
             rs.getString("account_number"),
             rs.getString("name"),
@@ -488,8 +491,70 @@ public class Bank {
             dob,
             rs.getString("bank_name"),
             rs.getDouble("initial_deposit"),
-            rs.getString("account_type")
+            rs.getString("account_type"),
+            creationDate
         );
+    }
+
+    // Analytical Methods for Admin Panel
+    public int getTotalAccountCount() {
+        String sql = "SELECT COUNT(*) FROM accounts";
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            if (rs.next()) return rs.getInt(1);
+        } catch (SQLException e) {
+            System.err.println("Database Error: Could not fetch total account count.");
+        }
+        return 0;
+    }
+
+    public int getTotalActiveAccountCount() {
+        String sql = "SELECT COUNT(*) FROM accounts WHERE status = 'ACTIVE'";
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            if (rs.next()) return rs.getInt(1);
+        } catch (SQLException e) {
+            System.err.println("Database Error: Could not fetch active account count.");
+        }
+        return 0;
+    }
+
+    public double getTotalSystemBalance() {
+        String sql = "SELECT SUM(balance) FROM accounts WHERE status = 'ACTIVE'";
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            if (rs.next()) return rs.getDouble(1);
+        } catch (SQLException e) {
+            System.err.println("Database Error: Could not fetch total system balance.");
+        }
+        return 0.0;
+    }
+
+    public int getTotalTransactionCount() {
+        String sql = "SELECT COUNT(*) FROM transactions";
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            if (rs.next()) return rs.getInt(1);
+        } catch (SQLException e) {
+            System.err.println("Database Error: Could not fetch total transaction count.");
+        }
+        return 0;
+    }
+
+    public boolean rejectAccount(String accountNumber) {
+        String sql = "DELETE FROM accounts WHERE account_number = ? AND status = 'PENDING'";
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, accountNumber);
+            return pstmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("Database Error: Could not reject account. " + e.getMessage());
+            return false;
+        }
     }
 
     private String buildPendingEmailBody(String name, String accNum, String email, String phone, String bankName, double deposit, String accountType) {
