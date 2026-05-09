@@ -50,6 +50,22 @@ public class AdminPanelUI extends JFrame {
         add(createTabbedPane(), BorderLayout.CENTER);
 
         add(createStatusBar(), BorderLayout.SOUTH);
+        startClock();
+    }
+
+    private void startClock() {
+        Timer timer = new Timer(1000, e -> {
+            updateStatusBar();
+        });
+        timer.start();
+    }
+
+    private JLabel statusLabel;
+    private JLabel timestampLabel;
+
+    private void updateStatusBar() {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        timestampLabel.setText("🕒 " + dtf.format(java.time.LocalDateTime.now()));
     }
 
     private JPanel createModernHeader() {
@@ -111,8 +127,7 @@ public class AdminPanelUI extends JFrame {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 20, 0));
         panel.setOpaque(false);
 
-        String[][] pendingAccounts = bank.getPendingAccounts();
-        int pendingCount = pendingAccounts != null ? pendingAccounts.length : 0;
+        int pendingCount = bank.getPendingAccounts().length;
 
         statsLabel = new JLabel(String.format("📊 %d Pending Accounts", pendingCount));
         statsLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
@@ -142,6 +157,9 @@ public class AdminPanelUI extends JFrame {
         return tabbedPane;
     }
 
+    private JTable pendingTable;
+    private javax.swing.table.DefaultTableModel tableModel;
+
     private JPanel createApprovalsPanel() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(BACKGROUND_COLOR);
@@ -165,14 +183,18 @@ public class AdminPanelUI extends JFrame {
         listPanel.setLayout(new BorderLayout());
         listPanel.setBorder(new EmptyBorder(25, 25, 25, 25));
 
-        pendingAccountsList = new JList<>(pendingAccountsModel);
-        pendingAccountsList.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-        pendingAccountsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        pendingAccountsList.setCellRenderer(new PendingAccountRenderer());
+        String[] columns = {"Account #", "Name", "Email"};
+        tableModel = new javax.swing.table.DefaultTableModel(columns, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) { return false; }
+        };
+        pendingTable = new JTable(tableModel);
+        pendingTable.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        pendingTable.setRowHeight(30);
+        pendingTable.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 13));
 
-        JScrollPane scrollPane = new JScrollPane(pendingAccountsList);
+        JScrollPane scrollPane = new JScrollPane(pendingTable);
         scrollPane.setBorder(new LineBorder(new Color(220, 220, 220)));
-        scrollPane.setPreferredSize(new Dimension(300, 350));
 
         JPanel controlsPanel = createControlsPanel();
 
@@ -186,6 +208,17 @@ public class AdminPanelUI extends JFrame {
         return panel;
     }
 
+    private void approveSelectedAccount(JTextField accNumField) {
+        int row = pendingTable.getSelectedRow();
+        if (row != -1) {
+            String accNum = (String) tableModel.getValueAt(row, 0);
+            approveAccount(accNum);
+            accNumField.setText("");
+        } else {
+            showError("Please select an account from the table.");
+        }
+    }
+
     private JPanel createControlsPanel() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(CARD_COLOR);
@@ -194,36 +227,47 @@ public class AdminPanelUI extends JFrame {
         JPanel inputPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
         inputPanel.setBackground(CARD_COLOR);
 
-        JTextField accNumField = new JTextField(15);
+        JTextField accNumField = new JTextField(10);
         accNumField.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         accNumField.setBorder(BorderFactory.createCompoundBorder(
                 new LineBorder(new Color(200, 200, 200)),
                 new EmptyBorder(10, 12, 10, 12)));
 
-        // Auto-fill from selection
-        pendingAccountsList.addListSelectionListener(e -> {
-            if (!e.getValueIsAdjusting() && pendingAccountsList.getSelectedValue() != null) {
-                String selected = pendingAccountsList.getSelectedValue();
-                if (!selected.startsWith("No pending")) {
-                    String accNum = extractAccountNumber(selected);
-                    accNumField.setText(accNum);
-                }
+        pendingTable.getSelectionModel().addListSelectionListener(e -> {
+            int row = pendingTable.getSelectedRow();
+            if (row != -1) {
+                accNumField.setText((String) tableModel.getValueAt(row, 0));
             }
         });
 
-        JButton approveSelectedBtn = new AdminButton("✅ Approve Selected", SUCCESS_COLOR);
-        JButton approveManualBtn = new AdminButton("✅ Approve by Number", SUCCESS_COLOR);
-        JButton viewDetailsBtn = new AdminButton("👁️ View Details", ADMIN_PRIMARY);
+        JButton approveBtn = new AdminButton("✅ Approve", SUCCESS_COLOR);
+        JButton rejectBtn = new AdminButton("❌ Reject", WARNING_COLOR);
+        JButton viewBtn = new AdminButton("👁️ Details", ADMIN_PRIMARY);
+        JButton bulkBtn = new AdminButton("🚀 Bulk Approve", ADMIN_PRIMARY);
 
-        approveSelectedBtn.addActionListener(e -> approveSelectedAccount(accNumField));
-        approveManualBtn.addActionListener(e -> approveManualAccount(accNumField));
-        viewDetailsBtn.addActionListener(e -> viewSelectedAccountDetails());
+        approveBtn.addActionListener(e -> approveSelectedAccount(accNumField));
+        rejectBtn.addActionListener(e -> {
+            String accNum = accNumField.getText().trim();
+            if (!accNum.isEmpty()) {
+                if (bank.rejectAccount(accNum)) {
+                    showSuccess("Account " + accNum + " rejected.");
+                    loadPendingAccounts();
+                    accNumField.setText("");
+                }
+            }
+        });
+        viewBtn.addActionListener(e -> {
+            String accNum = accNumField.getText().trim();
+            if (!accNum.isEmpty()) searchAccount(accNum);
+        });
+        bulkBtn.addActionListener(e -> showBulkOperationsDialog());
 
-        inputPanel.add(new JLabel("Account Number:"));
+        inputPanel.add(new JLabel("Account #:"));
         inputPanel.add(accNumField);
-        inputPanel.add(approveSelectedBtn);
-        inputPanel.add(approveManualBtn);
-        inputPanel.add(viewDetailsBtn);
+        inputPanel.add(approveBtn);
+        inputPanel.add(rejectBtn);
+        inputPanel.add(viewBtn);
+        inputPanel.add(bulkBtn);
 
         panel.add(inputPanel, BorderLayout.CENTER);
         return panel;
@@ -330,13 +374,13 @@ public class AdminPanelUI extends JFrame {
 
         // Sample statistics (in real implementation, these would come from the
         // database)
-        statsPanel.add(createStatCard("📈 Total Accounts", "1,247", ADMIN_PRIMARY, "Active banking accounts"));
-        statsPanel.add(createStatCard("⏳ Pending Approval", String.valueOf(getPendingCount()), WARNING_COLOR,
+        statsPanel.add(createStatCard("📈 Total Accounts", String.valueOf(bank.getTotalAccountCount()), ADMIN_PRIMARY, "Active banking accounts"));
+        statsPanel.add(createStatCard("⏳ Pending Approval", String.valueOf(bank.getPendingAccounts().length), WARNING_COLOR,
                 "Awaiting activation"));
-        statsPanel.add(createStatCard("✅ Active Today", "23", SUCCESS_COLOR, "Accounts active today"));
-        statsPanel.add(createStatCard("💰 Total Balance", "₹2.4M", new Color(255, 152, 0), "System total balance"));
-        statsPanel.add(createStatCard("📊 Transactions", "15,482", new Color(33, 150, 243), "Total transactions"));
-        statsPanel.add(createStatCard("👥 New Users", "47", new Color(156, 39, 176), "This month"));
+        statsPanel.add(createStatCard("✅ Active Accounts", String.valueOf(bank.getTotalActiveAccountCount()), SUCCESS_COLOR, "Total active users"));
+        statsPanel.add(createStatCard("💰 Total Balance", String.format("₹%.1fM", bank.getTotalSystemBalance()/1000000.0), new Color(255, 152, 0), "System total balance"));
+        statsPanel.add(createStatCard("📊 Transactions", String.valueOf(bank.getTotalTransactionCount()), new Color(33, 150, 243), "Total transactions"));
+        statsPanel.add(createStatCard("👥 Growth Index", "Active", new Color(156, 39, 176), "System health"));
 
         panel.add(headerPanel, BorderLayout.NORTH);
         panel.add(statsPanel, BorderLayout.CENTER);
@@ -375,11 +419,11 @@ public class AdminPanelUI extends JFrame {
                 new MatteBorder(1, 0, 0, 0, new Color(200, 200, 200)),
                 new EmptyBorder(8, 20, 8, 20)));
 
-        JLabel statusLabel = new JLabel("Ready - Admin Panel Active");
+        statusLabel = new JLabel("Ready - Admin Panel Active");
         statusLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         statusLabel.setForeground(TEXT_SECONDARY);
 
-        JLabel timestampLabel = new JLabel("NeoBank Admin v2.0");
+        timestampLabel = new JLabel("🕒 " + java.time.LocalDateTime.now().toString());
         timestampLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         timestampLabel.setForeground(TEXT_SECONDARY);
 
@@ -434,23 +478,14 @@ public class AdminPanelUI extends JFrame {
     }
 
     private void loadPendingAccounts() {
-        pendingAccountsModel.clear();
+        tableModel.setRowCount(0);
         String[][] pendingAccounts = bank.getPendingAccounts();
 
-        if (pendingAccounts != null && pendingAccounts.length > 0) {
+        if (pendingAccounts != null) {
             for (String[] account : pendingAccounts) {
-                if (account != null && account.length >= 3) {
-                    String displayText = String.format("%s - %s (%s)",
-                            account[0], account[1], account[2]);
-                    pendingAccountsModel.addElement(displayText);
-                }
+                tableModel.addRow(account);
             }
         }
-
-        if (pendingAccountsModel.isEmpty()) {
-            pendingAccountsModel.addElement("No pending accounts for approval");
-        }
-
         updateStats();
     }
 
@@ -523,16 +558,26 @@ public class AdminPanelUI extends JFrame {
     }
 
     private void showBulkOperationsDialog() {
+        String[][] pending = bank.getPendingAccounts();
+        if (pending.length == 0) {
+            showInfo("Bulk Operations", "No pending accounts to approve.");
+            return;
+        }
+
         int result = JOptionPane.showConfirmDialog(this,
-                "This will approve ALL pending accounts.\n\n" +
+                "This will approve ALL " + pending.length + " pending accounts.\n\n" +
                         "Are you sure you want to continue?",
                 "Bulk Account Approval",
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.WARNING_MESSAGE);
 
         if (result == JOptionPane.YES_OPTION) {
-            showInfo("Bulk Approval",
-                    "Bulk approval feature would approve all pending accounts.\nThis feature is under development.");
+            int successCount = 0;
+            for (String[] acc : pending) {
+                if (bank.approveAccount(acc[0])) successCount++;
+            }
+            showSuccess("Bulk Approval Complete!\nSuccessfully approved " + successCount + " accounts.");
+            loadPendingAccounts();
         }
     }
 
