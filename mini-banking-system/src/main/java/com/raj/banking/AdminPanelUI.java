@@ -500,37 +500,6 @@ public class AdminPanelUI extends JFrame {
         return pendingAccounts != null ? pendingAccounts.length : 0;
     }
 
-    private void approveSelectedAccount(JTextField accNumField) {
-        String selected = pendingAccountsList.getSelectedValue();
-        if (selected != null && !selected.startsWith("No pending")) {
-            String accNum = extractAccountNumber(selected);
-            approveAccount(accNum);
-            accNumField.setText("");
-        } else {
-            showError("Please select an account from the list.");
-        }
-    }
-
-    private void approveManualAccount(JTextField accNumField) {
-        String accNum = accNumField.getText().trim();
-        if (!accNum.isEmpty()) {
-            approveAccount(accNum);
-            accNumField.setText("");
-        } else {
-            showError("Please enter an account number.");
-        }
-    }
-
-    private void viewSelectedAccountDetails() {
-        String selected = pendingAccountsList.getSelectedValue();
-        if (selected != null && !selected.startsWith("No pending")) {
-            String accNum = extractAccountNumber(selected);
-            searchAccount(accNum);
-        } else {
-            showError("Please select an account from the list.");
-        }
-    }
-
     private void handleToolAction(String action) {
         switch (action) {
             case "SEARCH":

@@ -45,26 +45,52 @@ public class Bank {
         try (java.io.InputStream input = getClass().getClassLoader().getResourceAsStream("config.properties")) {
             if (input == null) {
                 System.out.println("Sorry, unable to find config.properties. Using defaults.");
-                // Default values if file not found
                 DB_URL = "jdbc:mysql://localhost:3306/bank_db";
                 USER = "root";
-                PASS = "Raj@77725";
-                EMAIL_USERNAME = "prabhushankarmund@gmail.com";
-                EMAIL_PASSWORD = "hbcs lpih hzez pgum";
+                PASS = "";
+                EMAIL_USERNAME = "";
+                EMAIL_PASSWORD = "";
                 EMAIL_HOST = "smtp.gmail.com";
                 EMAIL_PORT = "587";
-                return;
+            } else {
+                prop.load(input);
+                DB_URL = prop.getProperty("db.url");
+                USER = prop.getProperty("db.user");
+                PASS = prop.getProperty("db.password");
+                EMAIL_USERNAME = prop.getProperty("email.username");
+                EMAIL_PASSWORD = prop.getProperty("email.password");
+                EMAIL_HOST = prop.getProperty("email.host", "smtp.gmail.com");
+                EMAIL_PORT = prop.getProperty("email.port", "587");
             }
-            prop.load(input);
-            DB_URL = prop.getProperty("db.url");
-            USER = prop.getProperty("db.user");
-            PASS = prop.getProperty("db.password");
-            EMAIL_USERNAME = prop.getProperty("email.username");
-            EMAIL_PASSWORD = prop.getProperty("email.password");
-            EMAIL_HOST = prop.getProperty("email.host", "smtp.gmail.com");
-            EMAIL_PORT = prop.getProperty("email.port", "587");
+            
+            // Ensure database exists
+            ensureDatabaseExists();
+            
         } catch (java.io.IOException ex) {
-            ex.printStackTrace();
+            System.err.println("Error loading configuration: " + ex.getMessage());
+        }
+    }
+
+    private void ensureDatabaseExists() {
+        // Extract base URL (e.g., jdbc:mysql://localhost:3306/)
+        String baseUrl = DB_URL.substring(0, DB_URL.lastIndexOf("/") + 1);
+        String dbName = DB_URL.substring(DB_URL.lastIndexOf("/") + 1);
+        
+        // Remove query parameters if any
+        if (dbName.contains("?")) {
+            dbName = dbName.substring(0, dbName.indexOf("?"));
+        }
+
+        try (Connection conn = DriverManager.getConnection(baseUrl, USER, PASS);
+             Statement stmt = conn.createStatement()) {
+            stmt.executeUpdate("CREATE DATABASE IF NOT EXISTS " + dbName);
+            System.out.println("Database '" + dbName + "' verified/created successfully.");
+        } catch (SQLException e) {
+            System.err.println("Critical Database Error: Could not connect to MySQL server.");
+            System.err.println("Error details: " + e.getMessage());
+            if (e.getMessage().contains("Access denied")) {
+                System.err.println("HINT: Please check your MySQL password in 'src/main/resources/config.properties'.");
+            }
         }
     }
 
